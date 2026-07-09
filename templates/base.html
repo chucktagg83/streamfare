@@ -1,0 +1,53 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}StreamFare{% endblock %}</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/home.css' %}">
+
+</head>
+<body class="base-body-container">
+    <div class="container">
+      <!--  <a href="/static/images/theater.png.png" class="backing-image">
+            <img src="/static/images/theater.png.png" alt="Streamfare Logo">
+        </a> -->
+        <header class="header">
+            <h1>StreamFare</h1>
+            <nav class="nav">
+                <ul class="nav-list">
+                    <li><a href="{% url 'pages:home' %}">Home</a></li>
+                    <li><a href="{% url 'pages:about' %}">About</a></li>
+                    <li><a href="{% url 'pages:contact' %}">Contact</a></li>
+                     <li><a href="{% url 'signup' %}">SignUp</a></li>
+                    {% if user.is_authenticated %}
+                        <li><a href="#">Profile</a></li>
+                        <li>
+                            <form method="post" action="{% url 'logout' %}">
+                                {% csrf_token %}
+                                <button type="submit">Logout</button>
+                            </form>
+                        </li>
+                    {% else %}
+                        <li><a href="{% url 'login' %}">Login</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </header>
+
+        
+        <main>
+            {% block content %}
+            {% endblock content %}
+        </main>
+    </div>
+    
+    <footer class="footer">
+        <p>&copy; 2026 StreamFare. All rights reserved.</p>
+    </footer>
+
+</body>
+    
+</html>

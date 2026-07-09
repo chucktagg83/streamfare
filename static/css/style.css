@@ -1,0 +1,97 @@
+body{
+    margin:0;
+    padding:0;
+
+    background:url("/static/images/theater.png.png") no-repeat center center fixed;
+    background-size:cover;
+
+    color:white;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+.base-body-container{
+    min-height:100vh;
+}
+
+.container{
+    min-height:100vh;
+
+    display:flex;
+    flex-direction:column;
+}
+
+main{
+    flex:1;
+}
+
+.header {
+    background-color: #00000000;
+    color: #fff;
+    padding: 0px;
+    text-align: center;
+    margin-top: 0px; 
+    font-size: 40px;
+}   
+
+.header h1 {
+    margin: 0;
+    padding: 0;
+    font-size: 75px;
+}
+
+.nav {
+    background-color: #00000000;  
+}
+
+.nav-list {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    list-style-type: none;
+    margin: 0;
+    padding: 10px;
+    overflow: hidden;
+    color: #fff;
+    font-size: 20px;
+}
+
+.nav-list li{
+    display: flex;
+    justify-content: space-between;
+    list-style:none;
+    padding:10px 18px;
+    border-radius:8px;
+    transition:.3s;
+}
+
+
+.nav-list li:hover{
+    background:rgba(229,9,20,.85);
+    transform:translateY(-3px);
+}
+
+.nav-list li a{
+    color: white;
+    text-decoration:none;
+
+}
+
+.nav-list li  form > button  {
+    all:unset
+}
+
+
+/* Footer */
+.footer{
+    background:rgba(0,0,0,.95);
+    color:white;
+    text-align:center;
+    padding:20px;
+    border-top:1px solid rgba(255,255,255,.08);
+    width:100%;
+    box-sizing:border-box;
+}
+
+.footer p{
+    margin:0;
+}

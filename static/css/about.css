@@ -1,0 +1,127 @@
+
+
+/* ==============================
+   ABOUT PAGE - MULTIPLE GLASS CARDS
+============================== */
+
+.about-container {
+    min-height: 100vh;
+    padding: 100px 20px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 35px;
+}
+
+.about-card {
+    width: min(900px, 90%);
+    padding: 45px 55px;
+
+    background: rgba(10, 10, 10, 0.72);
+
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 20px;
+
+    box-shadow:
+        0 0 30px rgba(0, 0, 0, 0.75),
+        inset 0 0 20px rgba(255, 255, 255, 0.04);
+
+    color: white;
+    text-align: center;
+}
+
+.about-card h1 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    color: #ffffff;
+}
+
+.about-card h2 {
+    margin-bottom: 18px;
+    color: #e50914;
+    font-size: 2rem;
+}
+
+.about-card h3 {
+    margin: 20px 0;
+    color: #ffffff;
+}
+
+.about-card p {
+    line-height: 1.8;
+    margin-bottom: 16px;
+    color: #e5e5e5;
+}
+
+.about-card ul {
+    max-width: 650px;
+    margin: 20px auto 0;
+    padding-left: 25px;
+    text-align: left;
+}
+
+.about-card li {
+    margin: 10px 0;
+    line-height: 1.6;
+    color: #f1f1f1;
+}
+
+/* Buttons */
+
+.about-buttons {
+    width: min(900px, 90%);
+    margin: 15px auto 50px auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;   
+}
+
+.about-btn {
+    background: #e50914;
+    color: white;
+    text-decoration: none;
+    padding: 15px 28px;
+    border-radius: 10px;
+    font-weight: 600;
+    transition: 0.3s ease;
+}
+
+.about-btn:hover {
+    background: #ff3131;
+    transform: translateY(-3px);
+    box-shadow: 0 0 20px rgba(229, 9, 20, 0.6);
+}
+
+/* Mobile */
+
+@media (max-width: 768px) {
+    .about-card {
+        padding: 35px 25px;
+    }
+
+    .about-card h1 {
+        font-size: 2.2rem;
+    }
+
+    .about-card h2 {
+        font-size: 1.6rem;
+    }
+
+    .about-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .about-btn {
+        width: 100%;
+        text-align: center;
+    }
+}

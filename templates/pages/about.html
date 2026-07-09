@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}About Us{% endblock %}
+
+
+{% block content %} 
+
+<link rel="stylesheet" href="{% static 'css/about.css' %}">
+
+    <div class="about-container">
+        
+            <h1> About StreamFare</h1>
+
+            <section class="about-card">
+            <h2>Welcome to StreamFare</h2>
+            <p>StreamFare is a personal media streaming platform designed for movie enthusiasts who want complete control over their own digital library. Instead of relying on multiple streaming subscriptions or searching through physical hard drives, StreamFare brings your entire movie collection together into one modern, searchable, Netflix-inspired experience.</p>
+            <p>Whether you're browsing your favorite action films, discovering forgotten classics, or organizing thousands of titles, StreamFare makes your personal media library easy to explore and enjoy.</p>
+            </section>
+
+            <section class="about-card">
+            <h2>Our Mission</h2>
+            <p>To give users a beautiful, fast, and secure way to organize, search, and stream their own movie collections from anywhere in the world.</p>
+            <p>We believe your media should belong to you—not disappear when a streaming service removes it from their catalog. StreamFare is built around ownership, organization, and accessibility. </p>
+            </section>
+
+            <section class="about-card">
+            <h2>Features</h2>
+            <p>StreamFare is designed with both casual movie lovers and serious collectors in mind.</p>
+            <ul>
+                <h3>Current and Planned Features</h3>
+                <li>Secure user accounts and authentication</li>
+                <li>Personal movie library management</li>
+                <li>Lightning-fast search and filtering</li>
+                <li>Movie posters and artwork</li>
+                <li>Detailed movie information including:</li>
+                <li>Cast</li>
+                <li>Directors</li>
+                <li>Genres</li>
+                <li>Runtime</li>
+                <li>Ratings</li>
+                <li>Plot summaries</li>
+                <li>Progress tracking for movies you've watched</li>
+                <li>Responsive design for desktop, tablet, and mobile devices</li>
+                <li>Netflix-inspired interface</li>
+                <li>Personal dashboards and viewing statistics</li>
+                <li>AI-powered resume-quality recommendation engine (future feature)</li>
+                <li>AI movie recommendations based on your viewing history (planned)</li>
+            </ul>
+            </section>
+
+            <section class="about-card">
+            <h2>Built With Modern Technologies</h2>
+            <p>StreamFare is being developed using industry-standard technologies, including:</p>
+            <ul>
+                <li>Python</li>
+                <li>Django</li>
+                <li>HTML5</li>
+                <li>CSS3</li>
+                <li>Bootstrap 5</li>
+                <li>JavaScript</li>
+                <li>SQLite (development)</li>
+                <li>PostgreSQL (future production)</li>
+                <li>Git & GitHub</li>
+                <li>Agile Scrum development methodology</li>
+            </ul>
+            </section>
+
+            <section class="about-card">
+            <h2> Why StreamFare?</h2>
+            <p>Many people have spent years building digital movie collections stored on external hard drives or network storage devices. Accessing those collections is often inconvenient, with limited search capabilities and outdated interfaces.</p>
+            <p>StreamFare transforms a personal movie archive into a polished streaming experience, making it easy to browse, search, organize, and stream your media from virtually anywhere while maintaining complete ownership of your collection. Personal media servers and cloud-hosted libraries have become increasingly popular ways for users to access their own content across multiple devices.</p>
+            </section>
+
+            <section class="about-card">
+            <h2> Looking Ahead</h2>
+            <p>This project continues to evolve with new features planned for future releases, including:</p>
+            <ul>
+                <li>Cloud media storage integration</li>
+                <li>Multi-user profiles</li>
+                <li>Favorites and watchlists</li>
+                <li>Viewing history</li>
+                <li>Continue Watching</li>
+                <li>Advanced analytics dashboard</li>
+                <li>AI-powered movie recommendations</li>
+                <li>Smart collections</li>
+                <li>Trailer playback</li>
+                <li>Administrative media management</li>
+                <li>Mobile application support</li>
+            </ul>
+            <p>The application follows modern software engineering practices, including version control, sprint planning, project documentation, and iterative development.</p>
+            </section>
+
+            <section class="about-card">
+            <h2> Built as a Portfolio Project</h2>
+            <p>StreamFare is more than a movie streaming application—it's a showcase of full-stack web development skills and modern software engineering practices. The project demonstrates authentication, database design, CRUD operations, responsive UI development, media management, Agile project planning, documentation, and scalable application architecture.</p>
+            <p>Every feature is being developed with the goal of creating a production-quality application while continuously expanding technical knowledge and delivering an exceptional user experience.</p>
+            </section>
+       
+    </div>
+    <div class="about-buttons">
+        <a href="{% url 'pages:contact' %}" class="about-btn">🎬 Browse Library</a>
+        <a href="{% url 'pages:contact' %}" class="about-btn">📈 Project Roadmap</a>
+        <a href="{% url 'pages:contact' %}" class="about-btn">💻 View on GitHub</a>
+    </div>
+
+{% endblock %}

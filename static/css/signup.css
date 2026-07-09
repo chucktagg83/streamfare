@@ -1,0 +1,160 @@
+/* ==========================================
+   SIGNUP PAGE
+========================================== */
+
+.signup-container{
+    min-height:80vh;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    padding:40px 20px;
+}
+
+/* Glass Card */
+
+.signup-card{
+    width:min(500px,90%);
+
+    padding:45px;
+
+    background:rgba(10,10,10,.72);
+
+    backdrop-filter:blur(12px);
+    -webkit-backdrop-filter:blur(12px);
+
+    border:1px solid rgba(255,255,255,.12);
+
+    border-radius:20px;
+
+    box-shadow:
+        0 0 30px rgba(0,0,0,.75),
+        inset 0 0 20px rgba(255,255,255,.04);
+
+    text-align:center;
+}
+
+.signup-card h2{
+    margin-bottom:35px;
+
+    font-size:2.5rem;
+
+    color:white;
+}
+
+/* Form */
+
+.signup-card form{
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+}
+
+.signup-card p{
+    display:flex;
+    flex-direction:column;
+    text-align:left;
+
+    margin:0;
+}
+
+.signup-card label{
+    margin-bottom:8px;
+
+    font-weight:600;
+
+    color:#ddd;
+}
+
+.signup-card input{
+    padding:14px;
+
+    border:none;
+
+    border-radius:8px;
+
+    background:rgba(255,255,255,.10);
+
+    color:white;
+
+    font-size:16px;
+
+    outline:none;
+
+    transition:.3s;
+}
+
+.signup-card input:focus{
+    border:1px solid #e50914;
+
+    box-shadow:0 0 15px rgba(229,9,20,.5);
+}
+
+.signup-card input::placeholder{
+    color:#bbb;
+}
+
+/* Button */
+
+.signup-card button{
+    margin-top:20px;
+
+    padding:14px;
+
+    background:#e50914;
+
+    color:white;
+
+    border:none;
+
+    border-radius:8px;
+
+    font-size:18px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+    transition:.3s;
+}
+
+.signup-card button:hover{
+    background:#ff3131;
+
+    transform:translateY(-2px);
+
+    box-shadow:0 0 18px rgba(229,9,20,.6);
+}
+
+/* Help text */
+
+.helptext{
+    color:#aaa;
+
+    font-size:.85rem;
+
+    margin-top:5px;
+}
+
+.errorlist{
+    list-style:none;
+
+    color:#ff5c5c;
+
+    padding:0;
+
+    margin:8px 0;
+}
+
+@media(max-width:768px){
+
+    .signup-card{
+        padding:30px;
+    }
+
+    .signup-card h2{
+        font-size:2rem;
+    }
+
+}
