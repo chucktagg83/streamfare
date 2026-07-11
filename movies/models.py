@@ -1,9 +1,7 @@
 from django.db import models
 
-# Create your models here.
-# Create a Class (Model) for the Movie database table
+
 class Movie(models.Model):
-    # Create the fields for the Movie database table
     title = models.CharField(max_length=75)
     release_year = models.IntegerField(null=True, blank=True)
     rating = models.CharField(max_length=5)
@@ -15,6 +13,9 @@ class Movie(models.Model):
     format = models.CharField(max_length=50)
     collection = models.CharField(max_length=50)
     studio = models.CharField(max_length=75)
-    
-def __str__(self):
-    return self.title
+
+    # Stores the complete TMDB poster URL
+    poster_url = models.URLField(max_length=500, blank=True, null=True)
+
+    def __str__(self):
+        return self.title

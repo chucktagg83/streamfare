@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Search{% endblock %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'css/search.css' %}">
+
+<div class="search-container">
+    <section class="search-card">
+        <h2>Search for Movies, Shows, or Actors</h2>
+
+        <p>
+            Use the search bar below to find your favorite movies,
+            shows, or actors in your personal media library.
+        </p>
+
+        <form method="get" action="{% url 'pages:search' %}">
+            <input
+                type="text"
+                name="query"
+                value="{{ query }}"
+                placeholder="Search for movies, shows, or actors..."
+            >
+
+            <button type="submit">Search</button>
+        </form>
+    </section>
+</div>
+
+<div class="search-results">
+    {% if query %}
+        <h2>Search Results for "{{ query }}"</h2>
+
+        {% if results %}
+            <div class="movie-grid">
+                {% for movie in results %}
+                    <article class="movie-card">
+
+                        {% if movie.poster_url %}
+                            <img
+                                src="{{ movie.poster_url }}"
+                                alt="{{ movie.title }} poster"
+                                class="movie-poster"
+                            >
+                        {% else %}
+                            <div class="poster-placeholder">
+                                <span>No Poster Available</span>
+                            </div>
+                        {% endif %}
+
+                        <div class="movie-info">
+                            <h3>{{ movie.title }}</h3>
+
+                            {% if movie.release_year %}
+                                <p>{{ movie.release_year }}</p>
+                            {% endif %}
+
+                            {% if movie.genre %}
+                                <p>{{ movie.genre }}</p>
+                            {% endif %}
+
+                            {% if movie.imdb_rating %}
+                                <p>IMDb: {{ movie.imdb_rating }}</p>
+                            {% endif %}
+                        </div>
+
+                    </article>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>No results found.</p>
+        {% endif %}
+    {% endif %}
+</div>
+
+{% endblock %}
