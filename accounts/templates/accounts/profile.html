@@ -1,0 +1,340 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'css/profile.css' %}">
+
+<section class="profile-page">
+
+    <div class="profile-container">
+
+        <!-- ============================
+             PROFILE HEADER
+        ============================= -->
+
+        <div class="profile-header">
+
+            <div class="profile-image-area">
+
+                {% if profile.profile_picture %}
+
+                    <img
+                        src="{{ profile.profile_picture.url }}"
+                        alt="{{ user.username }} profile picture"
+                        class="profile-picture"
+                    >
+
+                {% else %}
+
+                    <div class="profile-placeholder">
+                        {{ user.username|first|upper }}
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+
+            <div class="profile-heading">
+
+                <h1>
+                    {{ user.first_name|default:user.username }}
+                    {{ user.last_name }}
+                </h1>
+
+                <p class="username">
+                    @{{ user.username }}
+                </p>
+
+                <p>
+                    {{ user.email }}
+                </p>
+
+                {% if profile.location %}
+                    <p>
+                        {{ profile.location }}
+                    </p>
+                {% endif %}
+
+                <p class="member-date">
+                    Member since {{ user.date_joined|date:"F Y" }}
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- ============================
+             SUCCESS MESSAGES
+        ============================= -->
+
+        {% if messages %}
+
+            {% for message in messages %}
+
+                <div class="profile-message">
+                    {{ message }}
+                </div>
+
+            {% endfor %}
+
+        {% endif %}
+
+
+        <!-- ============================
+             ANALYTICS CARDS
+        ============================= -->
+
+        <section class="analytics-section">
+
+            <div class="section-heading">
+                <h2>Your Viewing Analytics</h2>
+                <p>Your StreamFare activity summary</p>
+            </div>
+
+
+            <div class="analytics-grid">
+
+                <article class="analytics-card">
+                    <span class="analytics-label">
+                        Total Watch Time
+                    </span>
+
+                    <strong class="analytics-value">
+                        {{ watch_hours }}h {{ watch_minutes }}m
+                    </strong>
+                </article>
+
+
+                <article class="analytics-card">
+                    <span class="analytics-label">
+                        Movies Watched
+                    </span>
+
+                    <strong class="analytics-value">
+                        {{ unique_movies_watched }}
+                    </strong>
+                </article>
+
+
+                <article class="analytics-card">
+                    <span class="analytics-label">
+                        Completed Titles
+                    </span>
+
+                    <strong class="analytics-value">
+                        {{ completed_titles }}
+                    </strong>
+                </article>
+
+
+                <article class="analytics-card">
+                    <span class="analytics-label">
+                        Total Logins
+                    </span>
+
+                    <strong class="analytics-value">
+                        {{ total_logins }}
+                    </strong>
+                </article>
+
+            </div>
+
+        </section>
+
+
+        <!-- ============================
+             RECENT WATCH HISTORY
+        ============================= -->
+
+        <section class="history-section">
+
+            <div class="section-heading">
+                <h2>Recently Watched</h2>
+                <p>Your latest viewing activity</p>
+            </div>
+
+
+            {% if recent_watch_history %}
+
+                <div class="history-list">
+
+                    {% for session in recent_watch_history %}
+
+                        <article class="history-item">
+
+                            <div class="history-details">
+
+                                <h3>
+                                    {{ session.movie.title }}
+                                </h3>
+
+                                <p>
+                                    Watched
+                                    {{ session.seconds_watched }}
+                                    seconds
+                                </p>
+
+                                <small>
+                                    {{ session.last_watched_at|date:"M d, Y g:i A" }}
+                                </small>
+
+                            </div>
+
+
+                            <div class="history-status">
+
+                                {% if session.completed %}
+
+                                    <span class="status completed">
+                                        Completed
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="status in-progress">
+                                        In Progress
+                                    </span>
+
+                                {% endif %}
+
+                            </div>
+
+                        </article>
+
+                    {% endfor %}
+
+                </div>
+
+            {% else %}
+
+                <div class="empty-state">
+                    <p>You have not watched anything yet.</p>
+                </div>
+
+            {% endif %}
+
+        </section>
+
+
+        <!-- ============================
+             LOGIN HISTORY
+        ============================= -->
+
+        <section class="history-section">
+
+            <div class="section-heading">
+                <h2>Recent Logins</h2>
+                <p>Your most recent account access</p>
+            </div>
+
+
+            {% if recent_logins %}
+
+                <div class="login-table-wrapper">
+
+                    <table class="login-table">
+
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>IP Address</th>
+                                <th>Browser Information</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            {% for login in recent_logins %}
+
+                                <tr>
+                                    <td>
+                                        {{ login.login_time|date:"M d, Y g:i A" }}
+                                    </td>
+
+                                    <td>
+                                        {{ login.ip_address|default:"Unavailable" }}
+                                    </td>
+
+                                    <td class="user-agent">
+                                        {{ login.user_agent|default:"Unavailable"|truncatechars:60 }}
+                                    </td>
+                                </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            {% else %}
+
+                <div class="empty-state">
+                    <p>No login records are available.</p>
+                </div>
+
+            {% endif %}
+
+        </section>
+
+
+        <!-- ============================
+             EDIT PROFILE FORM
+        ============================= -->
+
+        <section class="edit-profile-section">
+
+            <div class="section-heading">
+                <h2>Edit Profile</h2>
+                <p>Update your account information</p>
+            </div>
+
+
+            <form
+                method="post"
+                enctype="multipart/form-data"
+                class="profile-form"
+            >
+
+                {% csrf_token %}
+
+
+                <div class="form-section">
+
+                    <h3>Account Information</h3>
+
+                    {{ user_form.as_p }}
+
+                </div>
+
+
+                <div class="form-section">
+
+                    <h3>Profile Information</h3>
+
+                    {{ profile_form.as_p }}
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="profile-button"
+                >
+                    Save Profile
+                </button>
+
+            </form>
+
+        </section>
+
+    </div>
+
+</section>
+
+{% endblock %}

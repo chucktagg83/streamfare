@@ -39,15 +39,19 @@
                     <article class="movie-card">
 
                         {% if movie.poster_url %}
-                            <img
-                                src="{{ movie.poster_url }}"
-                                alt="{{ movie.title }} poster"
-                                class="movie-poster"
-                            >
+                            <a href="{% url 'pages:movie-screen' pk=movie.pk %}">
+                                <img
+                                    src="{{ movie.poster_url }}"
+                                    alt="{{ movie.title }} poster"
+                                    class="movie-poster"
+                                >
+                            </a>
                         {% else %}
-                            <div class="poster-placeholder">
-                                <span>No Poster Available</span>
-                            </div>
+                            <a href="{% url 'pages:movie-screen' pk=movie.pk %}">
+                                <div class="poster-placeholder">
+                                    <span>No Poster Available</span>
+                                </div>
+                            </a>
                         {% endif %}
 
                         <div class="movie-info">

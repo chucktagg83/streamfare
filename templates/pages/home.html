@@ -5,19 +5,48 @@
 {% block title %}Home - StreamFare{% endblock %}
 
 {% block content %}
-    <main class="home-content">
-        <div class ="movie-screen">
-            <h2> 🎬 Welcome to StreamFare</h2>
-            <p>Your one-stop destination for streaming movies and shows.</p>
-            <div class="featured-content">
-                <h3>Featured Movies</h3>
-                <ul>
-                    <li><a href="#">Movie 1</a></li>
-                    <li><a href="#">Movie 2</a></li>
-                    <li><a href="#">Movie 3</a></li>
-                </ul>
+
+<main class="home-content">
+
+    <section class="movie-screen">
+
+        <h2>🎬 Welcome to StreamFare</h2>
+        <p>Your one-stop destination for streaming your personal movie collection.</p>
+
+        <section class="featured-content">
+
+            <h3>Featured Movies</h3>
+
+            <div class="featured-movie-grid">
+
+                {% for movie in featured_movies %}
+
+                    <article class="featured-movie-card">
+
+                        {% if movie.poster_url %}
+                            <img
+                                src="{{ movie.poster_url }}"
+                                alt="{{ movie.title }} poster"
+                                class="featured-poster"
+                            >
+                        {% endif %}
+
+                        <h4>{{ movie.title }}</h4>
+
+                    </article>
+
+                {% empty %}
+
+                    <p>No movies are currently available.</p>
+
+                {% endfor %}
+
             </div>
-        </div>
-    </main>
+
+        </section>
+
+    </section>
+
+</main>
 
 {% endblock %}

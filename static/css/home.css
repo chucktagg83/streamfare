@@ -1,3 +1,7 @@
+*{
+    box-sizing: border-box;
+}
+
 /* ===============================
    HOME PAGE
 ================================== */
@@ -26,7 +30,8 @@
 ================================== */
 
 .movie-screen{
-    width: min(900px, 90%);
+    position: relative;
+    width:min(1100px, 95%);
     padding: 60px;
 
     background: rgba(10, 10, 10, 0.72);
@@ -42,6 +47,8 @@
         inset 0 0 20px rgba(255,255,255,.04);
 
     text-align: center;
+    box-sizing: border-box;
+    
 }
 
 
@@ -93,92 +100,129 @@
     line-height:1.7;
 }
 
-
 /* ===============================
-   FEATURED MOVIES
+   FEATURED MOVIES SECTION
 ================================== */
 
-.featured-content{
+.featured-content {
+    width: 100%;
+    margin-top: 40px;
+    padding: 30px;
 
-    margin-top:40px;
+    background: #1b1b1b;
+    border: 1px solid #333;
+    border-radius: 15px;
 
-    background:#1b1b1b;
-
-    border-radius:15px;
-
-    padding:30px;
-
-    border:1px solid #333;
+    box-sizing: border-box;
 }
 
+.featured-content h3 {
+    margin: 0 0 25px;
 
-.featured-content h3{
-
-    color:#ff3131;
-
-    font-size:1.8rem;
-
-    margin-bottom:20px;
+    color: #ff3131;
+    font-size: 1.8rem;
+    text-align: center;
 }
 
 
 /* ===============================
-   MOVIE LIST
+   THREE MOVIE CARDS IN ONE ROW
 ================================== */
 
-.featured-content ul{
+.featured-movie-grid {
+    width: 100%;
 
-    list-style:none;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: stretch;
 
-    padding:0;
-
-    display:flex;
-
-    justify-content:center;
-
-    gap:25px;
-
-    flex-wrap:wrap;
+    gap: 25px;
 }
 
 
-.featured-content li{
+/* ===============================
+   INDIVIDUAL MOVIE CARD
+================================== */
 
-    transition:.3s;
+.featured-movie-card {
+    width: 220px;
+    flex: 0 0 220px;
+
+    background: #202020;
+    border: 1px solid #444;
+    border-radius: 15px;
+
+    overflow: hidden;
+    text-align: center;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease,
+        border-color 0.3s ease;
 }
 
 
-.featured-content li:hover{
+/* Hover effect */
 
-    transform:translateY(-8px) scale(1.05);
+.featured-movie-card:hover {
+    transform: translateY(-10px) scale(1.04);
+
+    border-color: #e50914;
+
+    box-shadow:
+        0 15px 35px rgba(0, 0, 0, 0.8),
+        0 0 25px rgba(229, 9, 20, 0.65);
 }
 
 
-.featured-content a{
+/* ===============================
+   POSTER IMAGE
+================================== */
 
-    display:block;
+.featured-poster {
+    display: block;
 
-    padding:18px 25px;
+    width: 100%;
+    height: 330px;
 
-    background:#202020;
+    object-fit: cover;
 
-    color:white;
+    transition: transform 0.3s ease;
+}
 
-    text-decoration:none;
-
-    border-radius:10px;
-
-    border:1px solid #444;
-
-    transition:.3s;
+.featured-movie-card:hover .featured-poster {
+    transform: scale(1.05);
 }
 
 
-.featured-content a:hover{
+/* ===============================
+   MOVIE TITLE
+================================== */
 
-    background:#e50914;
+.featured-movie-card h4 {
+    min-height: 50px;
 
-    border-color:#e50914;
+    margin: 0;
+    padding: 15px 10px;
 
-    box-shadow:0 0 20px rgba(229,9,20,.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    color: white;
+    font-size: 1rem;
+}
+
+
+/* ===============================
+   RESPONSIVE LAYOUT
+================================== */
+
+@media (max-width: 850px) {
+    .featured-movie-grid {
+        flex-wrap: wrap;
+    }
 }

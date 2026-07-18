@@ -4,6 +4,15 @@
     text-align: center;
 }
 
+.search-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.search-card {
+    text-align: center;
+}
 .movie-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));

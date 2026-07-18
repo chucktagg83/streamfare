@@ -6,10 +6,16 @@ from django.shortcuts import render
 from movies.models import Movie
 from django.db.models import Q
 from decouple import config
-
+from django.shortcuts import render, get_object_or_404
 
 def pages_home_view(request):
-    return render(request, "pages/home.html")
+    featured_movies = Movie.objects.order_by("?")[:3]  # Get 5 random movies
+    
+    context = {
+        "featured_movies": featured_movies,
+    }
+    
+    return render(request, "pages/home.html", context)
 
 
 def about_view(request):
@@ -85,3 +91,14 @@ def update_images_view(request):
         f"Finished updating missing movie posters. "
         f"{updated_count} movies were updated."
     )
+    
+def user_profile_view(request):
+    return render(request, "pages/profile.html")
+
+def movieScreen_view(request, pk):
+    video_object = get_object_or_404(Movie, pk=pk)
+    
+    context = {
+        "video_object": video_object,
+    }
+    return render(request, "pages/movieScreen.html", context)

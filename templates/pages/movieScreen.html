@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}Movie Screen{% endblock %}
+
+{% block content %}
+
+
+<main class="main-container">
+    <div class="movie-screen">
+
+        {% if video_object.video_file %}
+            <video width="640" height="360" controls>
+            <source src="{{ video_object.file.url }}" type="video/mp4">
+        Your browser does not support the video tag.
+            </video>
+        {%else %}
+            <p>No video file has been added for this movie.</p>
+        {% endif %}
+    </div>
+</main>
+
+{% endblock %}

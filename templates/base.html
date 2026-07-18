@@ -22,17 +22,17 @@
                     <li><a href="{% url 'pages:about' %}">📜 About</a></li>
                     <li><a href="{% url 'pages:contact' %}">☎️ Contact</a></li>
                     <li><a href="{% url 'pages:search' %}">🔍 Search</a></li>
-                     <li><a href="{% url 'signup' %}">🛜 SignUp</a></li>
+                     <li><a href="{% url 'accounts:signup' %}">🛜 SignUp</a></li>
                     {% if user.is_authenticated %}
-                        <li><a href="#">👤 Profile</a></li>
+                        <li><a href="{% url 'accounts:profile' %}">👤 Profile</a></li>
                         <li>
-                            <form method="post" action="{% url 'logout' %}">
+                            <form method="post" action="{% url 'accounts:logout' %}">
                                 {% csrf_token %}
                                 <button type="submit">🚪 Logout</button>
                             </form>
                         </li>
                     {% else %}
-                        <li><a href="{% url 'login' %}">🔑 Login</a></li>
+                        <li><a href="{% url 'accounts:login' %}">🔑 Login</a></li>
                     {% endif %}
                 </ul>
             </nav>

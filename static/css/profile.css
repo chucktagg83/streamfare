@@ -1,0 +1,90 @@
+/* ==========================================
+   PROFILE PAGE
+========================================== */
+
+main {
+    min-height: 100vh;
+
+    background:
+        linear-gradient(
+            rgba(0, 0, 0, 0.45),
+            rgba(0, 0, 0, 0.65)
+        ),
+        url("../images/theater.png");
+
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+.profile-page {
+    min-height: 100vh;
+    padding: 60px 20px;
+}
+
+.profile-container {
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+
+    display: flex;
+    flex-direction: column;
+
+    padding: 30px;
+
+    color: white;
+
+    /* Transparent glass background */
+    background: rgba(20, 20, 20, 0.35);
+
+    /* Blurs whatever is behind the container */
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+
+    /* Light edge around the glass */
+    border: 1px solid rgba(255, 255, 255, 0.18);
+
+    border-radius: 20px;
+
+    /* Shadow separates the glass from the background */
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+}
+
+.analytics-section,
+.history-section,
+.edit-profile-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 35px;
+    margin-bottom: 30px;
+
+    background: rgba(255, 255, 255, 0.07);
+
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 20px;
+
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+}
+
+.profile-header {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+
+    padding: 35px;
+    margin-bottom: 30px;
+
+    background: rgba(255, 255, 255, 0.07);
+
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 20px;
+
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+}
