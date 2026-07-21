@@ -1,23 +1,38 @@
 {% extends "base.html" %}
-
 {% load static %}
 
-{% block title %}Movie Screen{% endblock %}
+{% block title %}
+    {{ video_object.title }}
+{% endblock %}
 
 {% block content %}
-
 
 <main class="main-container">
     <div class="movie-screen">
 
-        {% if video_object.video_file %}
-            <video width="640" height="360" controls>
-            <source src="{{ video_object.file.url }}" type="video/mp4">
-        Your browser does not support the video tag.
+        <h1>{{ video_object.title }}</h1>
+
+        {% if video_object.media_path %}
+            <video
+                width="100%"
+                height="100vh"
+                controls
+                preload="metadata"
+            >
+                <source
+                    src="{% url 'pages:stream-movie' pk=video_object.pk %}"
+                    type="video/mp4"
+                >
+
+                Your browser does not support the video tag.
             </video>
-        {%else %}
-            <p>No video file has been added for this movie.</p>
+        {% else %}
+            <p>
+                No NAS movie file has been connected to
+                {{ video_object.title }}.
+            </p>
         {% endif %}
+
     </div>
 </main>
 

@@ -1,4 +1,11 @@
 import requests
+import mimetypes
+
+from pathlib import Path
+
+from django.conf import settings
+from django.contrib.auth.decorators import login_required
+from django.http import FileResponse, Http404
 
 from django.http import HttpResponse
 from django.shortcuts import render
@@ -102,3 +109,32 @@ def movieScreen_view(request, pk):
         "video_object": video_object,
     }
     return render(request, "pages/movieScreen.html", context)
+
+@login_required
+def stream_movie_view(request, pk):
+    movie = get_object_or_404(Movie, pk=pk)
+
+    if not movie.media_path:
+        raise Http404("This movie does not have a media file assigned.")
+
+    nas_root = Path(settings.NAS_MEDIA_ROOT).resolve()
+    movie_path = (nas_root / movie.media_path).resolve()
+
+    # Security check:
+    # Prevent a database path from escaping the approved NAS folder.
+    try:
+        movie_path.relative_to(nas_root)
+    except ValueError as error:
+        raise Http404("Invalid movie path.") from error
+
+    if not movie_path.is_file():
+        raise Http404("The movie file could not be found on the NAS.")
+
+    content_type, _ = mimetypes.guess_type(movie_path.name)
+
+    return FileResponse(
+        open(movie_path, "rb"),
+        content_type=content_type or "application/octet-stream",
+        filename=movie_path.name,
+        as_attachment=False,
+    )
