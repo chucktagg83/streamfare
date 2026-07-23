@@ -1,3 +1,216 @@
-{% extende "base.html" %}
+{% extends "base.html" %}
+{% load static %}
 
-{% block }
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/contact.css' %}">
+{% endblock %}
+
+
+{% block content %}
+
+<section class="contact-page">
+
+    <div class="contact-container">
+
+        <div class="contact-heading">
+
+            <h1>Contact and Feedback</h1>
+
+            <p>
+                Report broken files, playback problems,
+                missing content, or share your overall experience.
+            </p>
+
+        </div>
+
+
+        {% if messages %}
+
+            {% for message in messages %}
+
+                <div class="contact-message">
+                    {{ message }}
+                </div>
+
+            {% endfor %}
+
+        {% endif %}
+
+
+        <form method="post" class="feedback-form">
+
+            {% csrf_token %}
+
+
+            <div class="form-group">
+
+                <label for="{{ form.name.id_for_label }}">
+                    Name
+                </label>
+
+                {{ form.name }}
+
+                {% for error in form.name.errors %}
+                    <p class="form-error">{{ error }}</p>
+                {% endfor %}
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="{{ form.email.id_for_label }}">
+                    Email
+                </label>
+
+                {{ form.email }}
+
+                {% for error in form.email.errors %}
+                    <p class="form-error">{{ error }}</p>
+                {% endfor %}
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="{{ form.feedback_type.id_for_label }}">
+                    Type of Feedback
+                </label>
+
+                {{ form.feedback_type }}
+
+                {% for error in form.feedback_type.errors %}
+                    <p class="form-error">{{ error }}</p>
+                {% endfor %}
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="{{ form.media_title.id_for_label }}">
+                    Movie or Episode Title
+                </label>
+
+                {{ form.media_title }}
+
+                <small>
+                    Leave blank if your feedback is about the app in general.
+                </small>
+
+                {% for error in form.media_title.errors %}
+                    <p class="form-error">{{ error }}</p>
+                {% endfor %}
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="{{ form.message.id_for_label }}">
+                    Feedback Details
+                </label>
+
+                {{ form.message }}
+
+                {% for error in form.message.errors %}
+                    <p class="form-error">{{ error }}</p>
+                {% endfor %}
+
+            </div>
+
+
+            <div class="form-group rating-group">
+
+    <p class="rating-label">
+        Overall App Experience
+    </p>
+
+    <div class="rating-options">
+
+        <label class="rating-choice">
+            <input
+                type="radio"
+                name="rating"
+                value="1"
+                {% if form.rating.value == "1" %}checked{% endif %}
+            >
+
+            <span class="rating-stars">★☆☆☆☆</span>
+            <span class="rating-text">1 Star — Poor</span>
+        </label>
+
+
+        <label class="rating-choice">
+            <input
+                type="radio"
+                name="rating"
+                value="2"
+                {% if form.rating.value == "2" %}checked{% endif %}
+            >
+
+            <span class="rating-stars">★★☆☆☆</span>
+            <span class="rating-text">2 Stars — Fair</span>
+        </label>
+
+
+        <label class="rating-choice">
+            <input
+                type="radio"
+                name="rating"
+                value="3"
+                {% if form.rating.value == "3" %}checked{% endif %}
+            >
+
+            <span class="rating-stars">★★★☆☆</span>
+            <span class="rating-text">3 Stars — Good</span>
+        </label>
+
+
+        <label class="rating-choice">
+            <input
+                type="radio"
+                name="rating"
+                value="4"
+                {% if form.rating.value == "4" %}checked{% endif %}
+            >
+
+            <span class="rating-stars">★★★★☆</span>
+            <span class="rating-text">4 Stars — Very Good</span>
+        </label>
+
+
+        <label class="rating-choice">
+            <input
+                type="radio"
+                name="rating"
+                value="5"
+                {% if form.rating.value == "5" %}checked{% endif %}
+            >
+
+            <span class="rating-stars">★★★★★</span>
+            <span class="rating-text">5 Stars — Excellent</span>
+        </label>
+
+            </div>
+
+            {% for error in form.rating.errors %}
+                <p class="form-error">{{ error }}</p>
+            {% endfor %}
+
+        </div>
+
+
+            <button type="submit" class="submit-button">
+                Submit Feedback
+            </button>
+
+        </form>
+
+    </div>
+
+</section>
+
+{% endblock %}

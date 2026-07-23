@@ -5,6 +5,13 @@
     {{ video_object.title }}
 {% endblock %}
 
+{% block extra_css %}
+<link
+    rel="stylesheet"
+    href="{% static 'css/movieScreen.css' %}"
+>
+{% endblock %}
+
 {% block content %}
 
 <main class="main-container">
@@ -15,9 +22,10 @@
         {% if video_object.media_path %}
             <video
                 width="100%"
-                height="100vh"
+                height="600"
                 controls
                 preload="metadata"
+                playsinline
             >
                 <source
                     src="{% url 'pages:stream-movie' pk=video_object.pk %}"

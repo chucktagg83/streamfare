@@ -28,3 +28,4 @@ class MovieDatabaseAdmin(admin.ModelAdmin):
     )
     
     ordering = ("title",)
+    

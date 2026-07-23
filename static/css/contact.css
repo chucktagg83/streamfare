@@ -1,0 +1,283 @@
+/* ==========================================
+   CONTACT PAGE
+========================================== */
+
+.contact-page {
+    min-height: 100vh;
+    padding: 60px 20px;
+
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+
+/* ==========================================
+   GLASS CONTAINER
+========================================== */
+
+.contact-container {
+    width: 100%;
+    max-width: 850px;
+
+    padding: 40px;
+
+    color: white;
+
+    background: rgba(10, 10, 10, 0.68);
+
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 20px;
+
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+}
+
+
+/* ==========================================
+   PAGE HEADING
+========================================== */
+
+.contact-heading {
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.contact-heading h1 {
+    margin: 0 0 12px;
+    font-size: 2.2rem;
+}
+
+.contact-heading p {
+    max-width: 650px;
+    margin: 0 auto;
+
+    color: #cccccc;
+    line-height: 1.6;
+}
+
+
+/* ==========================================
+   FORM LAYOUT
+========================================== */
+
+.feedback-form {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-group label,
+.rating-label {
+    margin: 0;
+
+    color: white;
+    font-weight: bold;
+}
+
+.form-group small {
+    color: #aaaaaa;
+}
+
+
+/* ==========================================
+   INPUTS
+========================================== */
+
+.feedback-form input,
+.feedback-form select,
+.feedback-form textarea {
+    width: 100%;
+    box-sizing: border-box;
+
+    padding: 13px 14px;
+
+    color: white;
+    background: rgba(255, 255, 255, 0.08);
+
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 9px;
+
+    font-family: inherit;
+    font-size: 1rem;
+}
+
+.feedback-form textarea {
+    resize: vertical;
+}
+
+.feedback-form input::placeholder,
+.feedback-form textarea::placeholder {
+    color: #999999;
+}
+
+.feedback-form input:focus,
+.feedback-form select:focus,
+.feedback-form textarea:focus {
+    outline: none;
+    border-color: #e50914;
+
+    box-shadow: 0 0 0 3px rgba(229, 9, 20, 0.15);
+}
+
+
+/* ==========================================
+   DROPDOWN OPTIONS
+========================================== */
+
+.feedback-form select option {
+    color: white;
+    background: #1a1a1a;
+}
+
+
+/* ==========================================
+   RATING OPTIONS
+========================================== */
+
+.rating-options {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.rating-choice {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+
+    padding: 14px 16px;
+
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 10px;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.rating-choice:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 215, 0, 0.65);
+
+    transform: translateX(4px);
+}
+
+.rating-choice input {
+    width: auto;
+    margin: 0;
+
+    accent-color: #e50914;
+}
+
+.rating-stars {
+    min-width: 135px;
+
+    color: #ffd700;
+
+    font-size: 1.7rem;
+    letter-spacing: 3px;
+}
+
+.rating-text {
+    color: #eeeeee;
+    font-weight: bold;
+}
+
+.rating-choice:has(input:checked) {
+    background: rgba(229, 9, 20, 0.18);
+    border-color: #e50914;
+}
+
+
+/* ==========================================
+   FORM MESSAGES
+========================================== */
+
+.contact-message {
+    padding: 14px;
+    margin-bottom: 25px;
+
+    color: #d4edda;
+    background: rgba(40, 167, 69, 0.2);
+
+    border: 1px solid rgba(40, 167, 69, 0.5);
+    border-radius: 8px;
+}
+
+.form-error {
+    margin: 0;
+
+    color: #ff8a8a;
+    font-size: 0.9rem;
+}
+
+
+/* ==========================================
+   SUBMIT BUTTON
+========================================== */
+
+.submit-button {
+    align-self: flex-start;
+
+    padding: 13px 28px;
+
+    color: white;
+    background: #e50914;
+
+    border: none;
+    border-radius: 8px;
+
+    font-size: 1rem;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+.submit-button:hover {
+    background: #ff1722;
+    transform: translateY(-2px);
+}
+
+
+/* ==========================================
+   RESPONSIVE DESIGN
+========================================== */
+
+@media (max-width: 600px) {
+    .contact-page {
+        padding: 30px 15px;
+    }
+
+    .contact-container {
+        padding: 24px;
+    }
+
+    .contact-heading h1 {
+        font-size: 1.8rem;
+    }
+
+    .star-option label {
+        font-size: 2rem;
+    }
+
+    .submit-button {
+        width: 100%;
+    }
+}
