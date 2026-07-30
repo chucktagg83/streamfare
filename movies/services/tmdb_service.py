@@ -1,6 +1,8 @@
 import logging
 from datetime import datetime
 from typing import Any
+import re
+import unicodedata
 
 import requests
 from django.conf import settings
@@ -60,11 +62,74 @@ def tmdb_request(
 
 def normalize_title(title: str) -> str:
     """
-    Normalize a title so matching is less affected by capitalization
-    and extra spaces.
+    Normalize movie titles so punctuation and capitalization
+    do not prevent valid TMDb matches.
+
+    Examples:
+    "John Wick: Chapter 4"
+    "John Wick Chapter 4"
+
+    Both become:
+    "john wick chapter 4"
     """
 
-    return " ".join(title.lower().strip().split())
+    if not title:
+        return ""
+
+    # Convert accented characters into comparable plain text.
+    title = unicodedata.normalize("NFKD", title)
+
+    # Make everything lowercase.
+    title = title.lower()
+
+    # Replace ampersands with the word "and".
+    title = title.replace("&", " and ")
+
+    # Remove punctuation such as :, -, ', and parentheses.
+    title = re.sub(r"[^a-z0-9\s]", " ", title)
+
+    # Remove duplicate spaces.
+    title = " ".join(title.split())
+
+    return title
+
+def clean_tmdb_search_title(title: str) -> str:
+    """
+    Remove media-storage labels that are not normally part
+    of an official movie title.
+
+    Examples:
+
+    "Glory Disc 1" becomes "Glory"
+    "The Last Don Part 2" becomes "The Last Don"
+    "Movie Name DVD 1" becomes "Movie Name"
+
+    This changes only the title sent to TMDb.
+    It does not rename the movie in the database.
+    """
+
+    if not title:
+        return ""
+
+    cleaned_title = title.strip()
+
+    removable_patterns = [
+        r"\s+disc\s*\d+$",
+        r"\s+disk\s*\d+$",
+        r"\s+dvd\s*\d+$",
+        r"\s+blu[\s-]*ray\s*\d+$",
+        r"\s+part\s*\d+$",
+    ]
+
+    for pattern in removable_patterns:
+        cleaned_title = re.sub(
+            pattern,
+            "",
+            cleaned_title,
+            flags=re.IGNORECASE,
+        ).strip()
+
+    return cleaned_title
 
 
 def extract_year(date_string: str | None) -> int | None:
@@ -90,31 +155,37 @@ def find_best_movie_match(
     release_year: int | None = None,
 ) -> dict[str, Any]:
     """
-    Search TMDb and select the safest match.
+    Search TMDb and select the safest movie match.
 
     Matching order:
     1. Exact normalized title and exact year.
-    2. Exact normalized title.
-    3. Closest year among exact title matches.
+    2. Exact normalized title with a nearby year.
+    3. Partial title match with an exact year.
+    4. Partial title match with a nearby year.
     """
 
-    params = {
-        "query": title,
+    search_title = clean_tmdb_search_title(title)
+
+    search_params = {
+        "query": search_title,
         "include_adult": "false",
     }
 
     if release_year:
-        params["primary_release_year"] = release_year
+        search_params["primary_release_year"] = release_year
 
     search_data = tmdb_request(
-        "search/movie",
-        params=params,
-    )
+    "search/movie",
+    params={
+        "query": search_title,
+        "include_adult": "false",
+    },
+)
 
     results = search_data.get("results", [])
 
-    # Retry without the year because TMDb may store a different
-    # release year for international releases.
+    # Retry without the year because some movies have different
+    # theatrical, international, or digital release years.
     if not results and release_year:
         search_data = tmdb_request(
             "search/movie",
@@ -131,9 +202,10 @@ def find_best_movie_match(
             f'No TMDb results found for "{title}".'
         )
 
-    requested_title = normalize_title(title)
+    requested_title = normalize_title(search_title)
 
-    exact_title_matches = []
+    exact_matches = []
+    partial_matches = []
 
     for result in results:
         tmdb_title = normalize_title(
@@ -144,12 +216,32 @@ def find_best_movie_match(
             result.get("original_title", "")
         )
 
-        if requested_title in {tmdb_title, original_title}:
-            exact_title_matches.append(result)
+        available_titles = {
+            tmdb_title,
+            original_title,
+        }
 
-    # Exact title and exact year
+        # Exact match after punctuation has been removed.
+        if requested_title in available_titles:
+            exact_matches.append(result)
+            continue
+
+        # Allow one normalized title to contain the other.
+        # This handles titles such as:
+        # "X-Men United" versus "X2 X-Men United".
+        partial_match = any(
+            requested_title in candidate
+            or candidate in requested_title
+            for candidate in available_titles
+            if candidate
+        )
+
+        if partial_match:
+            partial_matches.append(result)
+
+    # Best option: exact normalized title and exact year.
     if release_year:
-        for result in exact_title_matches:
+        for result in exact_matches:
             result_year = extract_year(
                 result.get("release_date")
             )
@@ -157,11 +249,11 @@ def find_best_movie_match(
             if result_year == release_year:
                 return result
 
-    # Exact title with closest year
-    if exact_title_matches:
+    # Exact normalized title with the closest release year.
+    if exact_matches:
         if release_year:
             return min(
-                exact_title_matches,
+                exact_matches,
                 key=lambda result: abs(
                     (
                         extract_year(
@@ -173,9 +265,52 @@ def find_best_movie_match(
                 ),
             )
 
-        return exact_title_matches[0]
+        return exact_matches[0]
 
-    # Do not blindly trust an unrelated first result.
+    # Partial title match with exact year.
+    if release_year:
+        for result in partial_matches:
+            result_year = extract_year(
+                result.get("release_date")
+            )
+
+            if result_year == release_year:
+                return result
+
+    # Partial title match with nearby year.
+    if partial_matches:
+        if release_year:
+            closest_match = min(
+                partial_matches,
+                key=lambda result: abs(
+                    (
+                        extract_year(
+                            result.get("release_date")
+                        )
+                        or release_year
+                    )
+                    - release_year
+                ),
+            )
+
+            closest_year = extract_year(
+                closest_match.get("release_date")
+            )
+
+            # Only accept a partial match if the release year is
+            # no more than one year away.
+            if (
+                closest_year is not None
+                and abs(closest_year - release_year) <= 1
+            ):
+                return closest_match
+
+        # Without a year, partial matches are not safe enough.
+        raise TMDbError(
+            f'Partial title matches found for "{title}", '
+            "but none could be verified by release year."
+        )
+
     raise TMDbError(
         f'No confident title match found for "{title}".'
     )

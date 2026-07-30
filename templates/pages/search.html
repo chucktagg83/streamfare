@@ -5,78 +5,254 @@
 
 {% block content %}
 
-<link rel="stylesheet" href="{% static 'css/search.css' %}">
+<link
+    rel="stylesheet"
+    href="{% static 'css/search.css' %}"
+>
 
 <div class="search-container">
     <section class="search-card">
-        <h2>Search for Movies, Shows, or Actors</h2>
+        <h2>Search Your Media Library</h2>
 
         <p>
-            Use the search bar below to find your favorite movies,
-            shows, or actors in your personal media library.
+            Search by title, movie genre, director, or actor.
         </p>
 
-        <form method="get" action="{% url 'pages:search' %}">
+        <form
+            method="get"
+            action="{% url 'pages:search' %}"
+            class="basic-search-form"
+        >
             <input
                 type="text"
                 name="query"
                 value="{{ query }}"
-                placeholder="Search for movies, shows, or actors..."
+                placeholder="Search for movies, directors, or actors..."
             >
 
-            <button type="submit">Search</button>
+            <button type="submit">
+                Search
+            </button>
         </form>
     </section>
 </div>
 
+
+<div class="full-search-bar">
+    <h2>Full Movie Search</h2>
+
+    <p>
+        Choose one or more categories to narrow your movie library.
+    </p>
+
+    <form
+        method="get"
+        action="{% url 'pages:search' %}"
+        class="filter-search-form"
+    >
+
+        <div class="filter-group">
+            <label for="genre">
+                Genre
+            </label>
+
+            <select
+                name="genre"
+                id="genre"
+            >
+                <option value="">
+                    All Genres
+                </option>
+
+                {% for genre in genres %}
+                    <option
+                        value="{{ genre }}"
+                        {% if selected_genre == genre %}
+                            selected
+                        {% endif %}
+                    >
+                        {{ genre }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+
+        <div class="filter-group">
+            <label for="director">
+                Director
+            </label>
+
+            <input
+                type="text"
+                name="director"
+                id="director"
+                list="director-options"
+                value="{{ selected_director }}"
+                placeholder="Start typing a director..."
+                autocomplete="off"
+            >
+
+            <datalist id="director-options">
+                {% for director in directors %}
+                    <option value="{{ director }}"></option>
+                {% endfor %}
+            </datalist>
+        </div>
+
+
+        <div class="filter-group">
+            <label for="actor">
+                Actor
+            </label>
+
+            <input
+                type="text"
+                name="actor"
+                id="actor"
+                list="actor-options"
+                value="{{ selected_actor }}"
+                placeholder="Start typing an actor..."
+                autocomplete="off"
+            >
+
+            <datalist id="actor-options">
+                {% for actor in actors %}
+                    <option value="{{ actor }}"></option>
+                {% endfor %}
+            </datalist>
+        </div>
+
+
+        <div class="filter-buttons">
+            <button type="submit">
+                Apply Filters
+            </button>
+
+            <a
+                href="{% url 'pages:search' %}"
+                class="clear-filter-button"
+            >
+                Clear Filters
+            </a>
+        </div>
+
+    </form>
+</div>
+
+
 <div class="search-results">
-    {% if query %}
-        <h2>Search Results for "{{ query }}"</h2>
+
+    {% if search_was_used %}
+
+        <h2>
+            Search Results
+        </h2>
+
+        {% if query %}
+            <p class="active-search">
+                Text search:
+                <strong>{{ query }}</strong>
+            </p>
+        {% endif %}
+
+        {% if selected_genre %}
+            <p class="active-search">
+                Genre:
+                <strong>{{ selected_genre }}</strong>
+            </p>
+        {% endif %}
+
+        {% if selected_director %}
+            <p class="active-search">
+                Director:
+                <strong>{{ selected_director }}</strong>
+            </p>
+        {% endif %}
+
+        {% if selected_actor %}
+            <p class="active-search">
+                Actor:
+                <strong>{{ selected_actor }}</strong>
+            </p>
+        {% endif %}
+
 
         {% if results %}
-            <div class="movie-grid">
-                {% for movie in results %}
-                    <article class="movie-card">
 
-                        {% if movie.poster_url %}
-                            <a href="{% url 'pages:movie-screen' pk=movie.pk %}">
+            <div class="movie-grid">
+
+                {% for movie in results %}
+
+                    <a
+                        href="{% url 'pages:movie-screen' pk=movie.pk %}"
+                        class="movie-card-link"
+                    >
+                        <article class="movie-card">
+
+                            {% if movie.poster_url %}
                                 <img
                                     src="{{ movie.poster_url }}"
                                     alt="{{ movie.title }} poster"
                                     class="movie-poster"
                                 >
-                            </a>
-                        {% else %}
-                            <a href="{% url 'pages:movie-screen' pk=movie.pk %}">
+                            {% else %}
                                 <div class="poster-placeholder">
-                                    <span>No Poster Available</span>
+                                    <span>
+                                        No Poster Available
+                                    </span>
                                 </div>
-                            </a>
-                        {% endif %}
-
-                        <div class="movie-info">
-                            <h3>{{ movie.title }}</h3>
-
-                            {% if movie.release_year %}
-                                <p>{{ movie.release_year }}</p>
                             {% endif %}
 
-                            {% if movie.genre %}
-                                <p>{{ movie.genre }}</p>
-                            {% endif %}
+                            <div class="movie-info">
+                                <h3>
+                                    {{ movie.title }}
+                                </h3>
 
-                            {% if movie.imdb_rating %}
-                                <p>IMDb: {{ movie.imdb_rating }}</p>
-                            {% endif %}
-                        </div>
+                                {% if movie.release_year %}
+                                    <p>
+                                        {{ movie.release_year }}
+                                    </p>
+                                {% endif %}
 
-                    </article>
+                                {% if movie.genre %}
+                                    <p>
+                                        {{ movie.genre }}
+                                    </p>
+                                {% endif %}
+
+                                {% if movie.director %}
+                                    <p>
+                                        Directed by:
+                                        {{ movie.director }}
+                                    </p>
+                                {% endif %}
+
+                                {% if movie.imdb_rating %}
+                                    <p>
+                                        IMDb:
+                                        {{ movie.imdb_rating }}
+                                    </p>
+                                {% endif %}
+                            </div>
+
+                        </article>
+                    </a>
+
                 {% endfor %}
+
             </div>
+
         {% else %}
-            <p>No results found.</p>
+
+            <p class="no-results">
+                No movies matched your selected search options.
+            </p>
+
         {% endif %}
+
     {% endif %}
+
 </div>
 
 {% endblock %}

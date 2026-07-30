@@ -82,24 +82,154 @@ def preview_view(request):
     return render(request, "pages/preview.html")
 
 
-def search_view(request):
-    query = request.GET.get("query", "").strip()
-    results = Movie.objects.none()
+from django.db.models import Q
+from django.shortcuts import render
 
+from movies.models import Movie
+
+
+def split_database_values(queryset, field_name):
+    """
+    Turn comma-separated database values into one clean list.
+
+    Example:
+
+    "Action, Adventure, Science Fiction"
+
+    becomes:
+
+    [
+        "Action",
+        "Adventure",
+        "Science Fiction",
+    ]
+    """
+
+    individual_values = set()
+
+    database_values = queryset.values_list(
+        field_name,
+        flat=True,
+    )
+
+    for database_value in database_values:
+        if not database_value:
+            continue
+
+        for value in database_value.split(","):
+            cleaned_value = value.strip()
+
+            if cleaned_value:
+                individual_values.add(cleaned_value)
+
+    return sorted(
+        individual_values,
+        key=str.lower,
+    )
+
+
+def search_view(request):
+    query = request.GET.get(
+        "query",
+        "",
+    ).strip()
+
+    selected_genre = request.GET.get(
+        "genre",
+        "",
+    ).strip()
+
+    selected_director = request.GET.get(
+        "director",
+        "",
+    ).strip()
+
+    selected_actor = request.GET.get(
+        "actor",
+        "",
+    ).strip()
+
+    all_movies = Movie.objects.all()
+
+    results = all_movies
+
+    # Regular text search.
     if query:
-        results = Movie.objects.filter(
+        results = results.filter(
             Q(title__icontains=query)
             | Q(genre__icontains=query)
             | Q(director__icontains=query)
             | Q(cast__icontains=query)
         )
 
+    # Genre dropdown filter.
+    if selected_genre:
+        results = results.filter(
+            genre__icontains=selected_genre
+        )
+
+    # Director dropdown filter.
+    if selected_director:
+        results = results.filter(
+            director__icontains=selected_director
+        )
+
+    # Actor dropdown filter.
+    if selected_actor:
+        results = results.filter(
+            cast__icontains=selected_actor
+        )
+
+    # Only show results after the user searches
+    # or selects at least one dropdown option.
+    search_was_used = any(
+        [
+            query,
+            selected_genre,
+            selected_director,
+            selected_actor,
+        ]
+    )
+
+    if not search_was_used:
+        results = Movie.objects.none()
+
+    results = results.order_by(
+        "title"
+    ).distinct()
+
+    genres = split_database_values(
+        all_movies,
+        "genre",
+    )
+
+    directors = split_database_values(
+        all_movies,
+        "director",
+    )
+
+    actors = split_database_values(
+        all_movies,
+        "cast",
+    )
+
     context = {
         "query": query,
         "results": results,
+        "genres": genres,
+        "directors": directors,
+        "actors": actors,
+        "selected_genre": selected_genre,
+        "selected_director": selected_director,
+        "selected_actor": selected_actor,
+        "search_was_used": search_was_used,
     }
 
-    return render(request, "pages/search.html", context)
+    return render(
+        request,
+        "pages/search.html",
+        context,
+    )
 
 
 def update_images_view(request):

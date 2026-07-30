@@ -17,12 +17,12 @@ class Movie(models.Model):
     collection = models.CharField(max_length=150, blank=True)
     studio = models.CharField(max_length=150, blank=True)
     poster_url = models.URLField(max_length=500, blank=True, null=True,)
+    media_path = models.CharField(max_length=1000, blank=True, null=True,)
 
     # New TMDb-specific fields
     tmdb_id = models.PositiveIntegerField(
         null=True,
         blank=True,
-        unique=True,
     )
 
     tmdb_rating = models.FloatField(
@@ -33,6 +33,7 @@ class Movie(models.Model):
     imdb_id = models.CharField(
         max_length=20,
         blank=True,
+        null=True,
     )
 
     overview = models.TextField(
