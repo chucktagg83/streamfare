@@ -1,3 +1,4 @@
+from django.core import paginator
 import requests
 import mimetypes
 import re
@@ -7,11 +8,14 @@ from pathlib import Path
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 
+from django.core.paginator import Paginator
+
 from django.http import (
     FileResponse,
     Http404,
     HttpResponse,
     StreamingHttpResponse,
+    request,
 )
 
 from movies.models import Movie
@@ -128,6 +132,11 @@ def split_database_values(queryset, field_name):
     )
 
 
+from django.core.paginator import Paginator
+from django.db.models import Q
+from django.shortcuts import render
+
+
 def search_view(request):
     query = request.GET.get(
         "query",
@@ -180,8 +189,7 @@ def search_view(request):
             cast__icontains=selected_actor
         )
 
-    # Only show results after the user searches
-    # or selects at least one dropdown option.
+    # Check whether the user actually searched.
     search_was_used = any(
         [
             query,
@@ -194,9 +202,31 @@ def search_view(request):
     if not search_was_used:
         results = Movie.objects.none()
 
+    # Final ordering before pagination.
     results = results.order_by(
         "title"
     ).distinct()
+
+    # ==========================================
+    # PAGINATION
+    # ==========================================
+
+    paginator = Paginator(
+        results,
+        24,
+    )
+
+    page_number = request.GET.get(
+        "page"
+    )
+
+    page_obj = paginator.get_page(
+        page_number
+    )
+
+    # ==========================================
+    # DROPDOWN DATA
+    # ==========================================
 
     genres = split_database_values(
         all_movies,
@@ -215,13 +245,21 @@ def search_view(request):
 
     context = {
         "query": query,
-        "results": results,
+
+        # IMPORTANT:
+        # results now contains only the current page.
+        "results": page_obj,
+
+        "page_obj": page_obj,
+
         "genres": genres,
         "directors": directors,
         "actors": actors,
+
         "selected_genre": selected_genre,
         "selected_director": selected_director,
         "selected_actor": selected_actor,
+
         "search_was_used": search_was_used,
     }
 
@@ -320,32 +358,45 @@ def ranged_file_iterator(
     file_path: Path,
     start: int,
     length: int,
-    chunk_size: int = 1024 * 1024,
+    chunk_size: int = 256 * 1024,
 ):
     """
     Read only the requested section of a video file.
 
-    chunk_size is 1 MB, so Django sends the movie gradually
-    instead of loading the entire file into memory.
+    A 256 KB chunk allows the first bytes to reach
+    the browser more quickly while still streaming
+    efficiently.
     """
 
-    file_handle = open(file_path, "rb")
+    file_handle = open(
+        file_path,
+        "rb",
+        buffering=0,
+    )
 
     try:
         file_handle.seek(start)
+
         remaining = length
 
         while remaining > 0:
-            data = file_handle.read(min(chunk_size, remaining))
+            data = file_handle.read(
+                min(
+                    chunk_size,
+                    remaining,
+                )
+            )
 
             if not data:
                 break
 
             remaining -= len(data)
+
             yield data
 
     finally:
         file_handle.close()
+        
         
 @login_required        
 def stream_movie_view(request, pk):

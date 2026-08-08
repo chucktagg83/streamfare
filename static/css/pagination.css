@@ -1,0 +1,156 @@
+/* =====================================
+   SEARCH RESULTS COUNT
+===================================== */
+
+.results-count{
+    text-align:center;
+
+    margin:25px 0 35px;
+
+    font-size:18px;
+    font-weight:600;
+
+    color:#d4d4d8;
+
+    letter-spacing:.5px;
+}
+
+
+/* =====================================
+   PAGINATION
+===================================== */
+
+.pagination{
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    flex-wrap:wrap;
+
+    gap:14px;
+
+    margin:60px auto;
+
+}
+
+
+/* =====================================
+   PAGE BUTTONS
+===================================== */
+
+.pagination-button{
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    min-width:48px;
+    height:48px;
+
+    padding:0 18px;
+
+    border-radius:12px;
+
+    text-decoration:none;
+
+    font-size:16px;
+    font-weight:700;
+
+    color:white;
+
+    background:rgba(20,20,20,.92);
+
+    border:1px solid rgba(255,255,255,.10);
+
+    box-shadow:
+        0 6px 18px rgba(0,0,0,.35);
+
+    transition:
+        transform .25s,
+        background .25s,
+        border-color .25s,
+        box-shadow .25s;
+
+}
+
+
+/* =====================================
+   HOVER
+===================================== */
+
+.pagination-button:hover{
+
+    transform:translateY(-4px);
+
+    background:#b20710;
+
+    border-color:#ff2d55;
+
+    color:white;
+
+    box-shadow:
+        0 10px 25px rgba(178,7,16,.45);
+
+}
+
+
+/* =====================================
+   ACTIVE PAGE
+===================================== */
+
+.pagination-button.active{
+
+    background:linear-gradient(
+        135deg,
+        #e50914,
+        #b20710
+    );
+
+    color:white;
+
+    border-color:#ff4d4d;
+
+    box-shadow:
+        0 0 22px rgba(229,9,20,.55);
+
+    cursor:default;
+
+}
+
+
+/* =====================================
+   PREVIOUS / NEXT
+===================================== */
+
+.pagination-button:first-child,
+.pagination-button:last-child{
+
+    padding:0 22px;
+
+}
+
+
+/* =====================================
+   SMALL SCREENS
+===================================== */
+
+@media (max-width:768px){
+
+    .pagination{
+
+        gap:8px;
+
+    }
+
+    .pagination-button{
+
+        min-width:42px;
+        height:42px;
+
+        font-size:15px;
+
+        padding:0 14px;
+
+    }
+
+}

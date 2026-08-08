@@ -15,33 +15,39 @@
 {% block content %}
 
 <main class="main-container">
+
     <div class="movie-screen">
 
-        <h1>{{ video_object.title }}</h1>
+        <h1>
+            {{ video_object.title }}
+        </h1>
 
         {% if video_object.media_path %}
+
             <video
-                width="100%"
-                height="600"
+                class="movie-player"
                 controls
-                preload="metadata"
+                preload="auto"
                 playsinline
             >
                 <source
                     src="{% url 'pages:stream-movie' pk=video_object.pk %}"
-                    type="video/mp4"
                 >
 
-                Your browser does not support the video tag.
+                Your browser does not support this video format.
             </video>
+
         {% else %}
+
             <p>
-                No NAS movie file has been connected to
+                No movie file has been connected to
                 {{ video_object.title }}.
             </p>
+
         {% endif %}
 
     </div>
+
 </main>
 
 {% endblock %}

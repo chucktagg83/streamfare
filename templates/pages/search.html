@@ -1,18 +1,38 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Search{% endblock %}
+{% block title %}
+    Search
+{% endblock %}
 
-{% block content %}
+
+{% block extra_css %}
 
 <link
     rel="stylesheet"
     href="{% static 'css/search.css' %}"
+
+    rel="stylesheet"
+    href="{% static 'css/pagination.css' %}"
 >
 
+{% endblock %}
+
+
+{% block content %}
+
+
+<!-- =====================================
+     BASIC SEARCH
+===================================== -->
+
 <div class="search-container">
+
     <section class="search-card">
-        <h2>Search Your Media Library</h2>
+
+        <h2>
+            Search Your Media Library
+        </h2>
 
         <p>
             Search by title, movie genre, director, or actor.
@@ -23,6 +43,7 @@
             action="{% url 'pages:search' %}"
             class="basic-search-form"
         >
+
             <input
                 type="text"
                 name="query"
@@ -33,17 +54,29 @@
             <button type="submit">
                 Search
             </button>
+
         </form>
+
     </section>
+
 </div>
 
 
+
+<!-- =====================================
+     FULL CATEGORY SEARCH
+===================================== -->
+
 <div class="full-search-bar">
-    <h2>Full Movie Search</h2>
+
+    <h2>
+        Full Movie Search
+    </h2>
 
     <p>
         Choose one or more categories to narrow your movie library.
     </p>
+
 
     <form
         method="get"
@@ -51,7 +84,11 @@
         class="filter-search-form"
     >
 
+
+        <!-- GENRE -->
+
         <div class="filter-group">
+
             <label for="genre">
                 Genre
             </label>
@@ -60,11 +97,13 @@
                 name="genre"
                 id="genre"
             >
+
                 <option value="">
                     All Genres
                 </option>
 
                 {% for genre in genres %}
+
                     <option
                         value="{{ genre }}"
                         {% if selected_genre == genre %}
@@ -73,12 +112,19 @@
                     >
                         {{ genre }}
                     </option>
+
                 {% endfor %}
+
             </select>
+
         </div>
 
 
+
+        <!-- DIRECTOR -->
+
         <div class="filter-group">
+
             <label for="director">
                 Director
             </label>
@@ -94,14 +140,25 @@
             >
 
             <datalist id="director-options">
+
                 {% for director in directors %}
-                    <option value="{{ director }}"></option>
+
+                    <option
+                        value="{{ director }}"
+                    ></option>
+
                 {% endfor %}
+
             </datalist>
+
         </div>
 
 
+
+        <!-- ACTOR -->
+
         <div class="filter-group">
+
             <label for="actor">
                 Actor
             </label>
@@ -117,14 +174,25 @@
             >
 
             <datalist id="actor-options">
+
                 {% for actor in actors %}
-                    <option value="{{ actor }}"></option>
+
+                    <option
+                        value="{{ actor }}"
+                    ></option>
+
                 {% endfor %}
+
             </datalist>
+
         </div>
 
 
+
+        <!-- FILTER BUTTONS -->
+
         <div class="filter-buttons">
+
             <button type="submit">
                 Apply Filters
             </button>
@@ -135,124 +203,359 @@
             >
                 Clear Filters
             </a>
+
         </div>
 
     </form>
+
 </div>
 
 
+
+<!-- =====================================
+     SEARCH RESULTS
+===================================== -->
+
 <div class="search-results">
 
+
     {% if search_was_used %}
+
 
         <h2>
             Search Results
         </h2>
 
+
+
+        <!-- ACTIVE TEXT SEARCH -->
+
         {% if query %}
+
             <p class="active-search">
+
                 Text search:
-                <strong>{{ query }}</strong>
+
+                <strong>
+                    {{ query }}
+                </strong>
+
             </p>
+
         {% endif %}
+
+
+
+        <!-- ACTIVE GENRE -->
 
         {% if selected_genre %}
+
             <p class="active-search">
+
                 Genre:
-                <strong>{{ selected_genre }}</strong>
+
+                <strong>
+                    {{ selected_genre }}
+                </strong>
+
             </p>
+
         {% endif %}
+
+
+
+        <!-- ACTIVE DIRECTOR -->
 
         {% if selected_director %}
+
             <p class="active-search">
+
                 Director:
-                <strong>{{ selected_director }}</strong>
+
+                <strong>
+                    {{ selected_director }}
+                </strong>
+
             </p>
+
         {% endif %}
+
+
+
+        <!-- ACTIVE ACTOR -->
 
         {% if selected_actor %}
+
             <p class="active-search">
+
                 Actor:
-                <strong>{{ selected_actor }}</strong>
+
+                <strong>
+                    {{ selected_actor }}
+                </strong>
+
             </p>
+
         {% endif %}
 
+
+
+        <!-- =====================================
+             RESULTS COUNT
+        ===================================== -->
+
+        {% if page_obj.paginator.count %}
+
+            <p class="results-count">
+
+                Showing
+
+                {{ page_obj.start_index }}
+
+                -
+
+                {{ page_obj.end_index }}
+
+                of
+
+                {{ page_obj.paginator.count }}
+
+                movies
+
+            </p>
+
+        {% endif %}
+
+
+
+        <!-- =====================================
+             MOVIE RESULTS
+        ===================================== -->
 
         {% if results %}
 
+
             <div class="movie-grid">
 
+
                 {% for movie in results %}
+
 
                     <a
                         href="{% url 'pages:movie-screen' pk=movie.pk %}"
                         class="movie-card-link"
                     >
+
+
                         <article class="movie-card">
 
+
+                            <!-- POSTER -->
+
                             {% if movie.poster_url %}
+
                                 <img
                                     src="{{ movie.poster_url }}"
                                     alt="{{ movie.title }} poster"
                                     class="movie-poster"
                                 >
+
                             {% else %}
+
                                 <div class="poster-placeholder">
+
                                     <span>
                                         No Poster Available
                                     </span>
+
                                 </div>
+
                             {% endif %}
 
+
+
+                            <!-- MOVIE INFORMATION -->
+
                             <div class="movie-info">
+
+
                                 <h3>
                                     {{ movie.title }}
                                 </h3>
 
+
+
                                 {% if movie.release_year %}
+
                                     <p>
                                         {{ movie.release_year }}
                                     </p>
+
                                 {% endif %}
 
+
+
                                 {% if movie.genre %}
+
                                     <p>
                                         {{ movie.genre }}
                                     </p>
+
                                 {% endif %}
+
+
 
                                 {% if movie.director %}
+
                                     <p>
+
                                         Directed by:
+
                                         {{ movie.director }}
+
                                     </p>
+
                                 {% endif %}
+
+
 
                                 {% if movie.imdb_rating %}
+
                                     <p>
+
                                         IMDb:
+
                                         {{ movie.imdb_rating }}
+
                                     </p>
+
                                 {% endif %}
+
+
                             </div>
 
+
                         </article>
+
+
                     </a>
+
 
                 {% endfor %}
 
+
             </div>
+
+
+
+            <!-- =====================================
+                 PAGINATION
+            ===================================== -->
+
+            {% if page_obj.has_other_pages %}
+
+
+                <div class="pagination">
+
+
+                    <!-- PREVIOUS -->
+
+                    {% if page_obj.has_previous %}
+
+                        <a
+                            href="?page={{ page_obj.previous_page_number }}{% if query %}&query={{ query|urlencode }}{% endif %}{% if selected_genre %}&genre={{ selected_genre|urlencode }}{% endif %}{% if selected_director %}&director={{ selected_director|urlencode }}{% endif %}{% if selected_actor %}&actor={{ selected_actor|urlencode }}{% endif %}"
+                            class="pagination-button"
+                        >
+
+                            ← Previous
+
+                        </a>
+
+                    {% endif %}
+
+
+
+                    <!-- PAGE NUMBERS -->
+
+                    {% for number in page_obj.paginator.page_range %}
+
+
+                        <!-- CURRENT PAGE -->
+
+                        {% if number == page_obj.number %}
+
+                            <span class="pagination-button active">
+
+                                {{ number }}
+
+                            </span>
+
+
+
+                        <!-- NEARBY PAGE NUMBERS -->
+
+                        {% elif number >= page_obj.number|add:"-2" and number <= page_obj.number|add:"2" %}
+
+                            <a
+                                href="?page={{ number }}{% if query %}&query={{ query|urlencode }}{% endif %}{% if selected_genre %}&genre={{ selected_genre|urlencode }}{% endif %}{% if selected_director %}&director={{ selected_director|urlencode }}{% endif %}{% if selected_actor %}&actor={{ selected_actor|urlencode }}{% endif %}"
+                                class="pagination-button"
+                            >
+
+                                {{ number }}
+
+                            </a>
+
+                        {% endif %}
+
+
+                    {% endfor %}
+
+
+
+                    <!-- NEXT -->
+
+                    {% if page_obj.has_next %}
+
+                        <a
+                            href="?page={{ page_obj.next_page_number }}{% if query %}&query={{ query|urlencode }}{% endif %}{% if selected_genre %}&genre={{ selected_genre|urlencode }}{% endif %}{% if selected_director %}&director={{ selected_director|urlencode }}{% endif %}{% if selected_actor %}&actor={{ selected_actor|urlencode }}{% endif %}"
+                            class="pagination-button"
+                        >
+
+                            Next →
+
+                        </a>
+
+                    {% endif %}
+
+
+                </div>
+
+
+            {% endif %}
+
+
+
+        <!-- =====================================
+             NO RESULTS
+        ===================================== -->
 
         {% else %}
 
+
             <p class="no-results">
+
                 No movies matched your selected search options.
+
             </p>
+
 
         {% endif %}
 
+
     {% endif %}
 
+
 </div>
+
 
 {% endblock %}
