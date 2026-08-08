@@ -24,7 +24,10 @@ TMDB_API_KEY = config("TMDB_API_KEY")
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-ry_!^h4d8g_vsg*%v24@bxkna)hr+w)xyf7#hij(p8)@6170fr'
+SECRET_KEY = config(
+    "SECRET_KEY",
+    default="django-insecure-development-only",
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = "RENDER" not in os.environ
@@ -127,26 +130,62 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
-STATIC_URL = 'static/'
-STATICFILES_DIRS = [str(BASE_DIR.joinpath("static"))]
+# ==========================================================
+# STATIC FILES
+# ==========================================================
 
-MEDIA_URL = '/media/'
+STATIC_URL = "/static/"
+
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
+
+
+# ==========================================================
+# MEDIA FILES
+# ==========================================================
+
+MEDIA_URL = "/media/"
+
 MEDIA_ROOT = BASE_DIR / "media"
 
-LOGIN_REDIRECT_URL = 'pages:home'
-LOGOUT_REDIRECT_URL = 'pages:home'
-LOGIN_URL = 'accounts:login'
+
+# ==========================================================
+# AUTHENTICATION REDIRECTS
+# ==========================================================
+
+LOGIN_REDIRECT_URL = "pages:home"
+
+LOGOUT_REDIRECT_URL = "pages:home"
+
+LOGIN_URL = "accounts:login"
+
+
+# ==========================================================
+# NAS MEDIA STORAGE
+# ==========================================================
 
 NAS_MEDIA_ROOT = config(
     "NAS_MEDIA_ROOT",
     default=r"\\DeckplateLegacy\Media",
 )
 
+
+# ==========================================================
+# STORAGE CONFIGURATION
+# ==========================================================
+
 STORAGES = {
     "default": {
         "BACKEND": "django.core.files.storage.FileSystemStorage",
     },
+
     "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        "BACKEND": (
+            "whitenoise.storage."
+            "CompressedManifestStaticFilesStorage"
+        ),
     },
 }
